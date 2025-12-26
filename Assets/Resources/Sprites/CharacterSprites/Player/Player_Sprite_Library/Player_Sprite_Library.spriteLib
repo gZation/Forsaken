@@ -12,7 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5e6fedc2472449cead18ef23b5cb30d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Library: []
+  m_Library:
+  - m_Name: Face
+    m_Hash: 623301721
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: Face_Action
+      m_Hash: 847622121
+      m_Sprite: {fileID: -310323277, guid: b565bd45e0259f249b1b6533b8eab57f, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -310323277, guid: b565bd45e0259f249b1b6533b8eab57f, type: 3}
+    - m_Name: Face_Hurt
+      m_Hash: 153037493
+      m_Sprite: {fileID: 1061967115, guid: b565bd45e0259f249b1b6533b8eab57f, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 1061967115, guid: b565bd45e0259f249b1b6533b8eab57f, type: 3}
+    - m_Name: Face_Idle
+      m_Hash: 313957306
+      m_Sprite: {fileID: 3672341186769350056, guid: fbf7747407892c8449f79e50f59ddacc, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 3672341186769350056, guid: fbf7747407892c8449f79e50f59ddacc, type: 3}
+    m_FromMain: 0
+    m_EntryOverrideCount: 3
   m_PrimaryLibraryGUID: 
-  m_ModificationHash: 639021743111733363
+  m_ModificationHash: 639022867754088716
   m_Version: 1

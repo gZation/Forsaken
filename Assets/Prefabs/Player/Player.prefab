@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3716649538870585536}
   - component: {fileID: 6684034645986570965}
   - component: {fileID: 5071130118726366173}
+  - component: {fileID: 9136830572664249376}
   m_Layer: 0
   m_Name: Face Idle
   m_TagString: Untagged
@@ -108,6 +109,22 @@ MonoBehaviour:
     m_Extent: {x: 1.0146503, y: 0.6965399, z: 0}
   m_AlwaysUpdate: 1
   m_AutoRebind: 0
+--- !u!114 &9136830572664249376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 63178131187387246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed8b1ae4e4e52b34ea557c1c11e076fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_CategoryHash: 1.4470151e-16
+  m_labelHash: 1.915901e-33
+  m_SpriteKey: 0
+  m_SpriteHash: 961155080
 --- !u!1 &286232488327412284
 GameObject:
   m_ObjectHideFlags: 0
