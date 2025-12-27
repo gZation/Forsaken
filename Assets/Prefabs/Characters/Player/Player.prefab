@@ -122,7 +122,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_CategoryHash: 1.4470151e-16
-  m_labelHash: 1.915901e-33
+  m_labelHash: 1.1524204e-27
   m_SpriteKey: 0
   m_SpriteHash: 961155080
 --- !u!1 &286232488327412284
@@ -1290,7 +1290,7 @@ Rigidbody2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0

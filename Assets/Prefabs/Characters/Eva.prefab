@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5119203937750916059}
   - component: {fileID: 3999963888313880559}
   - component: {fileID: 3859755715397865193}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Eva
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -175,5 +175,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b97e02577e5d834b82a14f3d7d03722, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
   moveSpeed: 5
+  stoppingDist: 2
