@@ -6,7 +6,6 @@ public class PlayerHurtState : PlayerBaseState
     public PlayerHurtState(PlayerStateManager currentContext, PlayerStateFactory playerFactory) : base(currentContext, playerFactory){}
     public override void EnterState()
     {
-        Debug.Log("player is hurt");
         context.PlayerAnimator.SetBool("isHurt", true);
         context.AppliedMovementX = 0f;
         context.AppliedMovementY = 0f;

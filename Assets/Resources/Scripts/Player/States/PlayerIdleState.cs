@@ -5,7 +5,6 @@ public class PlayerIdleState : PlayerBaseState
     public PlayerIdleState(PlayerStateManager currentContext, PlayerStateFactory playerFactory) : base(currentContext, playerFactory){}
     public override void EnterState()
     {
-        Debug.Log("Player is Idle");
         context.PlayerAnimator.SetBool("isIdle", true);
         context.AppliedMovementX = 0f;
         context.AppliedMovementY = 0f;

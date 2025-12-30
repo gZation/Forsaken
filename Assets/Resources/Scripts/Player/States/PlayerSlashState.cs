@@ -5,7 +5,6 @@ public class PlayerSlashState : PlayerBaseState
     public PlayerSlashState(PlayerStateManager currentContext, PlayerStateFactory playerFactory) : base(currentContext, playerFactory){}
     public override void EnterState()
     {
-        Debug.Log("player is attacking");
         context.PlayerAnimator.SetBool("isSlashing", true);
         context.AppliedMovementX = 0f;
         // context.AppliedMovementY = 0f;

@@ -5,7 +5,6 @@ public class PlayerWalkState : PlayerBaseState
     public PlayerWalkState(PlayerStateManager currentContext, PlayerStateFactory playerFactory) : base(currentContext, playerFactory){}
     public override void EnterState()
     {
-        Debug.Log("player is walking");
         context.PlayerAnimator.SetBool("isWalking", true);
         context.AppliedMovementX = context.CurrentMovement.x * context.MoveSpeed;
     }

@@ -5,7 +5,6 @@ public class PlayerJumpState : PlayerBaseState
     public PlayerJumpState(PlayerStateManager currentContext, PlayerStateFactory playerFactory) : base(currentContext, playerFactory){}
     public override void EnterState()
     {
-        Debug.Log("player is jumping");
         context.PlayerAnimator.SetBool("isJumping", true);
         context.Grounded = false;
         context.AppliedMovementX = context.CurrentMovement.x * context.MoveSpeed / 3f;

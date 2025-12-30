@@ -5,7 +5,6 @@ public class PlayerRunState : PlayerBaseState
     public PlayerRunState(PlayerStateManager currentContext, PlayerStateFactory playerFactory) : base(currentContext, playerFactory){}
     public override void EnterState()
     {
-        Debug.Log("player is running");
         context.PlayerAnimator.SetBool("isRunning", true);
         context.AppliedMovementX = context.CurrentMovement.x * context.RunSpeed;
         

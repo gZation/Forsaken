@@ -6,16 +6,17 @@ TagManager:
   tags:
   - Enemy
   - Weapon
+  - Boss
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Background
   - Water
   - UI
-  - Eva
-  - 
-  - 
+  - Characters
+  - Enemies
+  - Weapons
   - 
   - 
   - 

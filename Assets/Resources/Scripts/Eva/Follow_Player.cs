@@ -5,6 +5,7 @@ public class Follow_Player : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float stoppingDist = 2f;
     private Transform target;
+    private bool isFlipped = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -16,6 +17,7 @@ public class Follow_Player : MonoBehaviour
     void FixedUpdate()
     {
         if (target == null) return;
+        FacePlayer();
         float currentDist = Vector2.Distance(transform.position, target.position);
         if (currentDist > stoppingDist)
         {
@@ -24,6 +26,21 @@ public class Follow_Player : MonoBehaviour
                 target.position, 
                 moveSpeed * Time.fixedDeltaTime
             );
+        }
+    }
+
+    public void FacePlayer()
+    {
+        Vector3 flipped = transform.localScale;
+        flipped.x *= -1f;
+        if (transform.position.x < target.position.x && isFlipped)
+        {
+            transform.localScale = flipped;
+            isFlipped = false;
+        } else if (transform.position.x > target.position.x && !isFlipped)
+        {
+            transform.localScale = flipped;
+            isFlipped = true;
         }
     }
 }

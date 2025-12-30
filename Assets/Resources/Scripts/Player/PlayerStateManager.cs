@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-public class PlayerStateManager : MonoBehaviour
+public class PlayerStateManager : MonoBehaviour, IDamageable
 {
     //control variables
     [SerializeField] private float moveSpeed = 5f;
@@ -25,7 +25,9 @@ public class PlayerStateManager : MonoBehaviour
     bool grounded = true;
 
     //player info
-    private int health = 100;
+    private int health;
+    private float damageCooldown;
+    private float canTakeDamage;
 
     //States
     PlayerBaseState currentState;
@@ -49,6 +51,7 @@ public class PlayerStateManager : MonoBehaviour
     public float RunSpeed {get {return runSpeed;}}
     public float MoveSpeed {get {return moveSpeed;}}
     public int Health {get {return health;} set {health = value;}}
+    public float Cooldown {get {return damageCooldown;} set {damageCooldown = value;}}
 
     void Awake()
     {
@@ -71,6 +74,10 @@ public class PlayerStateManager : MonoBehaviour
         playerInput.CharacterControls.Jump.canceled += OnJump;
         playerInput.CharacterControls.Hit.started += OnHit;
         playerInput.CharacterControls.Hit.canceled += OnHit;
+
+        Health = 100;
+        Cooldown = 1f;
+        canTakeDamage = 0f;
     
     }
 
@@ -84,12 +91,6 @@ public class PlayerStateManager : MonoBehaviour
         if (player.linearVelocity.x != 0)
         {
             sprite.localScale = new Vector3(Mathf.Sign(player.linearVelocity.x), 1, 1);
-        }
-        
-        if (Health <= 0)
-        {
-            Debug.Log("you lost");
-            Time.timeScale = 0f;
         }
         
     }
@@ -136,13 +137,20 @@ public class PlayerStateManager : MonoBehaviour
 
     public void ApplyDamage(int damage)
     {
-        if (currentState.GetType() == typeof(PlayerHurtState))
+        if (Time.time > canTakeDamage)
         {
-            return;
+            canTakeDamage = Time.time + Cooldown;
+            Health -= damage;
+            Debug.Log("Health: " + Health);
+            currentState.SwitchState(states.Hurt());
         }
-        health -= damage;
-        Debug.Log("Health: " + Health);
-        currentState.SwitchState(states.Hurt());
+
+        if (Health <= 0f)
+        {
+            Debug.Log("You Lost!");
+            Time.timeScale = 0f;
+        }
+       
     }
 
     void OnSlashAnimationStart()
