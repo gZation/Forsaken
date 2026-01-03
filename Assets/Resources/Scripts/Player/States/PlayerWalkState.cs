@@ -12,10 +12,11 @@ public class PlayerWalkState : State
     {
         playerContext.Anim.SetBool("isWalking", true);
         playerContext.AppliedMovementX = playerContext.CurrentMovementInput.x * playerContext.MoveSpeed;
+        
     }
     public override void UpdateState()
     {
-        playerContext.AppliedMovementX = playerContext.CurrentMovementInput.x * playerContext.MoveSpeed;
+        playerContext.AppliedMovementX = playerContext.CurrentMovementInput.x * playerContext.MoveSpeed * 0.999f;
         
         CheckSwitchStates();
     }

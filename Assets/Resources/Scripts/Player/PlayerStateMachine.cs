@@ -90,7 +90,8 @@ public class PlayerStateMachine : StateMachine, IDamageable
     protected override void UpdateState()
     {
         currentState.UpdateStates();
-        rb.linearVelocity = appliedMovement;
+        //rb.linearVelocity = appliedMovement;
+        rb.AddForce(appliedMovement, ForceMode2D.Impulse);
     }
 
     protected override void FaceMovement()

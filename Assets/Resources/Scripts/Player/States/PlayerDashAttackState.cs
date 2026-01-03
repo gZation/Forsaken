@@ -12,11 +12,14 @@ public class PlayerDashAttackState : State
         Debug.Log("beginning dash attack");
         playerContext.Anim.SetTrigger("Dash");
         playerContext.DashTrail.GetComponent<TrailRenderer>().enabled = true;
-        playerContext.RB.AddForce(Vector2.left * 10f, ForceMode2D.Impulse);
+        Vector2 direction = new Vector2(playerContext.Sprite.localScale.x, 0f);
+        playerContext.RB.AddForce(direction * playerContext.RunSpeed * 20f, ForceMode2D.Impulse);
+        // playerContext.AppliedMovementX = playerContext.RunSpeed * 50f;
     }
     public override void UpdateState()
     {
-        if (playerContext.RB.linearVelocity.x == 0f)
+        //playerContext.AppliedMovementX *= 0.75f;
+        if (playerContext.RB.linearVelocity.x <= 0.01f)
         {
             playerContext.DashFinished = true;
         }

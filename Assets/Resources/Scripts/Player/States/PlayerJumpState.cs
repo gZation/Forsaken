@@ -13,16 +13,18 @@ public class PlayerJumpState : State
         playerContext.Anim.SetBool("isJumping", true);
         playerContext.Grounded = false;
         playerContext.AppliedMovementX = playerContext.CurrentMovementInput.x * playerContext.MoveSpeed / 3f;
+        playerContext.AppliedMovementY = playerContext.RunSpeed;
     }
     public override void UpdateState()
     {
         playerContext.AppliedMovementX = playerContext.CurrentMovementInput.x * playerContext.MoveSpeed;
-        playerContext.AppliedMovementY = 0f ;
+        //playerContext.AppliedMovementY = 0f ;
         CheckSwitchStates();
     }
     public override void ExitState()
     {
         playerContext.Anim.SetBool("isJumping", false);
+        playerContext.AppliedMovementY = 0f;
         playerContext.Grounded = true;
     }
 

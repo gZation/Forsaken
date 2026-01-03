@@ -16,7 +16,7 @@ public class PlayerRunState : State
     }
     public override void UpdateState()
     {
-        playerContext.AppliedMovementX = playerContext.CurrentMovementInput.x * playerContext.RunSpeed;
+        playerContext.AppliedMovementX = playerContext.CurrentMovementInput.x * playerContext.RunSpeed * 0.999f;
         
         CheckSwitchStates();
     }
