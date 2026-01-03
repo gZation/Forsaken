@@ -18,6 +18,8 @@ public class PlayerStateMachine : StateMachine, IDamageable
     private bool attackFinished = false;
     private bool shootStarted = false;
     private bool shootFinished = false;
+    private bool dashStarted = false;
+    private bool dashFinished = false;
     private bool hurtFinished = false;
     private bool grounded = true;
 
@@ -40,6 +42,8 @@ public class PlayerStateMachine : StateMachine, IDamageable
     public bool AttackFinished {get {return attackFinished; } set {attackFinished = value;}}
     public bool ShootStarted {get {return shootStarted; } set {shootStarted = value;}}
     public bool ShootFinished {get {return shootFinished; } set {shootFinished = value;}}
+    public bool DashStarted {get {return dashStarted; } set {dashStarted = value;}}
+    public bool DashFinished {get {return dashFinished; } set {dashFinished = value;}}
 
     public bool HurtFinished {get {return hurtFinished; } set {hurtFinished = value;}}
     public bool Grounded {get {return grounded;} set {grounded = value;}}
@@ -85,7 +89,7 @@ public class PlayerStateMachine : StateMachine, IDamageable
 
     protected override void UpdateState()
     {
-        currentState.UpdateState();
+        currentState.UpdateStates();
         rb.linearVelocity = appliedMovement;
     }
 

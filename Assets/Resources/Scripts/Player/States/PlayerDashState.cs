@@ -7,30 +7,37 @@ public class PlayerDashState : State
     {
         playerContext = currentContext;
         isBaseState = true;
+        InitializeSubStates();
+    }
+    public override void InitializeSubStates()
+    {
+        if (playerContext.IsDashPressed)
+        {
+            SetSubState(new PlayerDashSetUpState(playerContext));
+        } else if (!playerContext.DashFinished)
+        {
+            SetSubState(new PlayerDashAttackState(playerContext));
+        }
     }
     public override void EnterState()
     {
-        playerContext.Anim.SetTrigger("Dash");
+        Debug.Log("dash parent state enter");
+        playerContext.DashFinished = false;
         // playerContext.AppliedMovementX = 0f;
         // playerContext.AppliedMovementY = 0f;
-        playerContext.SetTimeScale(0.5f);
-        playerContext.DashTrail.GetComponent<TrailRenderer>().enabled = true;
     }
     public override void UpdateState()
     {
-        playerContext.AppliedMovementX = playerContext.CurrentMovementInput.x * playerContext.MoveSpeed * 2f;
         CheckSwitchStates();
     }
     public override void ExitState()
     {
-        playerContext.SetTimeScale(1f);
-        playerContext.DashTrail.GetComponent<TrailRenderer>().enabled = false;
-        playerContext.Anim.ResetTrigger("Dash");
+        Debug.Log("dash parent state exit");
     }
 
     public override void CheckSwitchStates()
     {
-        if (!playerContext.IsDashPressed)
+        if (!playerContext.IsDashPressed && playerContext.DashFinished)
         {
             SwitchState(new PlayerIdleState(playerContext));
         }
