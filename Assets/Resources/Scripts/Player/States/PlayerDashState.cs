@@ -14,9 +14,6 @@ public class PlayerDashState : State
         if (playerContext.IsDashPressed)
         {
             SetSubState(new PlayerDashSetUpState(playerContext));
-        } else if (!playerContext.DashFinished)
-        {
-            SetSubState(new PlayerDashAttackState(playerContext));
         }
     }
     public override void EnterState()

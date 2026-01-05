@@ -30,6 +30,7 @@ public class PlayerStateMachine : StateMachine, IDamageable
 
     //additional game objects
     private GameObject dashTrail;
+    private GameObject dashArrow;
 
     //getters and settesr
     public bool IsMovementPressed {get {return isMovementPressed;} set {isMovementPressed = value;}}
@@ -52,6 +53,7 @@ public class PlayerStateMachine : StateMachine, IDamageable
     public int Health {get {return health;} set {health = value;}}
     public float Cooldown {get {return damageCooldown;} set {damageCooldown = value;}}
     public GameObject DashTrail {get {return dashTrail;}}
+    public GameObject DashArrow {get {return dashArrow;}}
 
     protected override void Init()
     {
@@ -60,6 +62,7 @@ public class PlayerStateMachine : StateMachine, IDamageable
         //set reference variables
         playerInput = new PlayerInput();
         dashTrail = transform.Find("dashing trail").gameObject;
+        dashArrow = transform.Find("dash arrow").gameObject;
 
         //set player input callbacks
         playerInput.CharacterControls.Move.started += OnMovementPerformed;

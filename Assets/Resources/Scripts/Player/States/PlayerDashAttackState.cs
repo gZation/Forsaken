@@ -10,9 +10,10 @@ public class PlayerDashAttackState : State
     public override void EnterState()
     {
         Debug.Log("beginning dash attack");
+        Vector2 direction = playerContext.DashArrow.GetComponent<Player_Dash_Direction>().DashDirection;
+        playerContext.DashArrow.SetActive(false);
         playerContext.Anim.SetTrigger("Dash");
         playerContext.DashTrail.GetComponent<TrailRenderer>().enabled = true;
-        Vector2 direction = new Vector2(playerContext.Sprite.localScale.x, 0f);
         playerContext.RB.AddForce(direction * playerContext.RunSpeed * 20f, ForceMode2D.Impulse);
         // playerContext.AppliedMovementX = playerContext.RunSpeed * 50f;
     }

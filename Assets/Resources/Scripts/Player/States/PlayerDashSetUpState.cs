@@ -10,6 +10,7 @@ public class PlayerDashSetUpState : State
     public override void EnterState()
     {
         Debug.Log("entering dash set up");
+        playerContext.DashArrow.SetActive(true);
         playerContext.SetTimeScale(0.5f);
         playerContext.AppliedMovementX = 0f;
     }
