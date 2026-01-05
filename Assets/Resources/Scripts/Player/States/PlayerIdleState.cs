@@ -10,7 +10,9 @@ public class PlayerIdleState : State
     }
     public override void EnterState()
     {
-        playerContext.Anim.SetBool("isIdle", true);
+        Debug.Log("in idle state");
+        playerContext.CanMove = true;
+        playerContext.Anim.Play("Idle");
         playerContext.AppliedMovementX = 0f;
         playerContext.AppliedMovementY = 0f;
     }
@@ -20,7 +22,6 @@ public class PlayerIdleState : State
     }
     public override void ExitState()
     {
-        playerContext.Anim.SetBool("isIdle", false);
     }
 
     public override void CheckSwitchStates()

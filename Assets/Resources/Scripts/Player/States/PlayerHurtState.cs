@@ -9,7 +9,8 @@ public class PlayerHurtState : State
     }
     public override void EnterState()
     {
-        playerContext.Anim.SetBool("isHurt", true);
+        playerContext.CanMove = false;
+        playerContext.Anim.Play("Hurt");
         playerContext.AppliedMovementX = 0f;
         playerContext.AppliedMovementY = 0f;
     }
@@ -20,7 +21,7 @@ public class PlayerHurtState : State
     public override void ExitState()
     {
         playerContext.IsHurt = false;
-        playerContext.Anim.SetBool("isHurt", false);
+        playerContext.CanMove = true;
     }
 
     public override void CheckSwitchStates()

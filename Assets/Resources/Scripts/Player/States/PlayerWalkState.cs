@@ -10,7 +10,8 @@ public class PlayerWalkState : State
     }
     public override void EnterState()
     {
-        playerContext.Anim.SetBool("isWalking", true);
+        playerContext.CanMove = true;
+        playerContext.Anim.Play("Walk");
         playerContext.AppliedMovementX = playerContext.CurrentMovementInput.x * playerContext.MoveSpeed;
         
     }
@@ -22,7 +23,6 @@ public class PlayerWalkState : State
     }
     public override void ExitState()
     {
-        playerContext.Anim.SetBool("isWalking", false);
     }
 
     public override void CheckSwitchStates()

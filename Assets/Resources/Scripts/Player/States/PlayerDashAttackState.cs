@@ -12,15 +12,15 @@ public class PlayerDashAttackState : State
         Debug.Log("beginning dash attack");
         Vector2 direction = playerContext.DashArrow.GetComponent<Player_Dash_Direction>().DashDirection;
         playerContext.DashArrow.SetActive(false);
-        playerContext.Anim.SetTrigger("Dash");
+        playerContext.Anim.Play("Dash");
         playerContext.DashTrail.GetComponent<TrailRenderer>().enabled = true;
-        playerContext.RB.AddForce(direction * playerContext.RunSpeed * 20f, ForceMode2D.Impulse);
+        playerContext.RB.AddForce(direction * playerContext.DashForce, ForceMode2D.Impulse);
         // playerContext.AppliedMovementX = playerContext.RunSpeed * 50f;
     }
     public override void UpdateState()
     {
         //playerContext.AppliedMovementX *= 0.75f;
-        if (playerContext.RB.linearVelocity.x <= 0.01f)
+        if (Mathf.Abs(playerContext.RB.linearVelocity.x) <= 0.01f)
         {
             playerContext.DashFinished = true;
         }
@@ -30,7 +30,6 @@ public class PlayerDashAttackState : State
     {
         Debug.Log("ending dash attack");
         playerContext.DashTrail.GetComponent<TrailRenderer>().enabled = false;
-        playerContext.Anim.ResetTrigger("Dash");
     }
 
     public override void CheckSwitchStates()

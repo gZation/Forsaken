@@ -13,6 +13,7 @@ public class PlayerDashSetUpState : State
         playerContext.DashArrow.SetActive(true);
         playerContext.SetTimeScale(0.5f);
         playerContext.AppliedMovementX = 0f;
+        playerContext.AppliedMovementY = 0f;
     }
     public override void UpdateState()
     {

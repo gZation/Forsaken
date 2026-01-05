@@ -10,7 +10,8 @@ public class PlayerAttackState : State
     }
     public override void EnterState()
     {
-        playerContext.Anim.SetBool("isAttacking", true);
+        playerContext.CanMove = false;
+        playerContext.Anim.Play("Slash");
         playerContext.AppliedMovementX = 0f;
     }
     public override void UpdateState()
@@ -19,7 +20,7 @@ public class PlayerAttackState : State
     }
     public override void ExitState()
     {
-        playerContext.Anim.SetBool("isAttacking", false);
+        playerContext.CanMove = true;
     }
 
     public override void CheckSwitchStates()

@@ -4,11 +4,14 @@ public class PlayerStateMachine : StateMachine, IDamageable
 {
     //control variables
     [SerializeField] private  float runSpeed = 7f;
+    [SerializeField] private float jumpForce = 20f;
+    [SerializeField] private float dashForce = 30f;
 
     //player input system
     private PlayerInput playerInput;
     private Vector2 currentMovementInput;
     private bool isMovementPressed;
+    private bool canMove = true;
     private bool isRunPressed;
     private bool isJumpPressed;
     private bool isHitPressed;
@@ -21,7 +24,7 @@ public class PlayerStateMachine : StateMachine, IDamageable
     private bool dashStarted = false;
     private bool dashFinished = false;
     private bool hurtFinished = false;
-    private bool grounded = true;
+    [SerializeField] private bool grounded = true;
 
     //player info
     private int health;
@@ -31,8 +34,10 @@ public class PlayerStateMachine : StateMachine, IDamageable
     //additional game objects
     private GameObject dashTrail;
     private GameObject dashArrow;
+    private Transform groundCheck;
 
     //getters and settesr
+    public bool CanMove {get {return canMove;} set {canMove = value;}}
     public bool IsMovementPressed {get {return isMovementPressed;} set {isMovementPressed = value;}}
     public bool IsRunPressed {get {return isRunPressed;} set {isRunPressed = value;}}
     public bool IsJumpPressed {get {return isJumpPressed;} set {isJumpPressed = value;}}
@@ -50,6 +55,8 @@ public class PlayerStateMachine : StateMachine, IDamageable
     public bool Grounded {get {return grounded;} set {grounded = value;}}
     public Vector2 CurrentMovementInput {get {return currentMovementInput;}}
     public float RunSpeed {get {return runSpeed;}}
+    public float JumpForce {get {return jumpForce;}}
+    public float DashForce {get {return dashForce;}}
     public int Health {get {return health;} set {health = value;}}
     public float Cooldown {get {return damageCooldown;} set {damageCooldown = value;}}
     public GameObject DashTrail {get {return dashTrail;}}
@@ -63,7 +70,7 @@ public class PlayerStateMachine : StateMachine, IDamageable
         playerInput = new PlayerInput();
         dashTrail = transform.Find("dashing trail").gameObject;
         dashArrow = transform.Find("dash arrow").gameObject;
-
+        groundCheck = transform.Find("groundedCheck");
         //set player input callbacks
         playerInput.CharacterControls.Move.started += OnMovementPerformed;
         playerInput.CharacterControls.Move.canceled += OnMovementCancelled;
@@ -92,9 +99,32 @@ public class PlayerStateMachine : StateMachine, IDamageable
 
     protected override void UpdateState()
     {
+        // RaycastHit2D other = Physics2D.CircleCast(groundCheck.position, 0.5f, Vector2.down, groundDetection, 9);
+        // if (other.collider != null)
+        // {
+        //     Debug.Log("collided with " + other.collider.gameObject.name);
+        //     grounded = true;
+        // } else
+        // {
+        //     Debug.Log("not grounded");
+        //     grounded = false;
+        // }
+        HandleMovement();
         currentState.UpdateStates();
+        
         //rb.linearVelocity = appliedMovement;
-        rb.AddForce(appliedMovement, ForceMode2D.Impulse);
+        //rb.AddForce(appliedMovement, ForceMode2D.Impulse);
+    }
+
+    private void HandleMovement()
+    {
+        if (canMove)
+        {
+            rb.linearVelocity = appliedMovement;
+        } else
+        {
+            rb.AddForce(appliedMovement, ForceMode2D.Impulse);
+        }
     }
 
     protected override void FaceMovement()
@@ -205,13 +235,22 @@ public class PlayerStateMachine : StateMachine, IDamageable
         HurtFinished = true;
     }
 
-    void OnJumpAnimationStart()
+    public void OnCollisionEnter2D(Collision2D other)
     {
-        grounded = false;
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            grounded = true;
+            Debug.Log("grounded");
+        }
     }
-    void OnJumpAnimationEnd()
+
+    public void OnCollisionExit2D(Collision2D other)
     {
-        grounded = true;
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            grounded = false;
+            Debug.Log("not grounded");
+        }
     }
 
 }

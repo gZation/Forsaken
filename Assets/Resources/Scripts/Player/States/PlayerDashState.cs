@@ -20,6 +20,7 @@ public class PlayerDashState : State
     {
         Debug.Log("dash parent state enter");
         playerContext.DashFinished = false;
+        playerContext.CanMove = false;
         // playerContext.AppliedMovementX = 0f;
         // playerContext.AppliedMovementY = 0f;
     }
@@ -30,6 +31,7 @@ public class PlayerDashState : State
     public override void ExitState()
     {
         Debug.Log("dash parent state exit");
+        playerContext.CanMove = true;
     }
 
     public override void CheckSwitchStates()
