@@ -1883,6 +1883,8 @@ MonoBehaviour:
   runSpeed: 7
   jumpForce: 5
   dashForce: 30
+  dashDamage: 5
+  dashMeter: 10
   grounded: 1
 --- !u!70 &2933974084628620906
 CapsuleCollider2D:
@@ -2151,7 +2153,7 @@ GameObject:
   m_Layer: 6
   m_Name: Shoot Point
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1

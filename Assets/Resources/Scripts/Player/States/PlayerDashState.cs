@@ -18,7 +18,6 @@ public class PlayerDashState : State
     }
     public override void EnterState()
     {
-        Debug.Log("dash parent state enter");
         playerContext.DashFinished = false;
         playerContext.CanMove = false;
         playerContext.CurrentDashMeter = 0;
@@ -31,7 +30,6 @@ public class PlayerDashState : State
     }
     public override void ExitState()
     {
-        Debug.Log("dash parent state exit");
         playerContext.CanMove = true;
     }
 

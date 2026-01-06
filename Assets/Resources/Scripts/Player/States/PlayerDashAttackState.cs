@@ -9,7 +9,6 @@ public class PlayerDashAttackState : State
     }
     public override void EnterState()
     {
-        Debug.Log("beginning dash attack");
         Vector2 direction = playerContext.DashArrow.GetComponent<Player_Dash_Direction>().DashDirection;
         playerContext.DashArrow.SetActive(false);
         playerContext.Anim.Play("Dash");
@@ -28,7 +27,6 @@ public class PlayerDashAttackState : State
     }
     public override void ExitState()
     {
-        Debug.Log("ending dash attack");
         playerContext.DashTrail.GetComponent<DashTrail>().IsDrawingTrail = false;
         playerContext.DashTrail.GetComponent<DashTrail>().Clear();
         Physics2D.IgnoreLayerCollision(6, 7, false);

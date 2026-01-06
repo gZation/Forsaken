@@ -16,14 +16,10 @@ public class PlayerJumpState : State
         playerContext.RB.AddForce(Vector2.up * playerContext.JumpForce, ForceMode2D.Impulse);
         playerContext.AppliedMovementX = 0f;
         playerContext.AppliedMovementY = 0f;
+        playerContext.IsJumpPressed = false; 
     }
     public override void UpdateState()
     {
-        Debug.Log("in jump state");
-        //playerContext.CanMove = true;
-        //playerContext.AppliedMovementY = 0f;
-        //playerContext.AppliedMovementX = playerContext.CurrentMovementInput.x * playerContext.MoveSpeed / 3f;
-        //playerContext.AppliedMovementX = playerContext.CurrentMovementInput.x * playerContext.MoveSpeed;
         playerContext.AppliedMovementY = 0f ;
         CheckSwitchStates();
     }
@@ -31,7 +27,6 @@ public class PlayerJumpState : State
     {
         playerContext.CanMove = true;
         playerContext.AppliedMovementY = 0f;
-        //playerContext.Grounded = true;
     }
 
     public override void CheckSwitchStates()
@@ -44,7 +39,6 @@ public class PlayerJumpState : State
             SwitchState(new PlayerDashState(playerContext));
         } else if (playerContext.Grounded && !playerContext.IsMovementPressed )
         {
-            Debug.Log("switching to idle");
             SwitchState(new PlayerIdleState(playerContext));
         } else if (playerContext.Grounded && !playerContext.IsRunPressed)
         {

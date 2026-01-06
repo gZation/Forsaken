@@ -235,7 +235,6 @@ public class PlayerStateMachine : StateMachine, IDamageable
         if (other.gameObject.CompareTag("Ground"))
         {
             grounded = true;
-            Debug.Log("grounded");
         }
     }
 
@@ -244,7 +243,6 @@ public class PlayerStateMachine : StateMachine, IDamageable
         if (other.gameObject.CompareTag("Ground"))
         {
             grounded = false;
-            Debug.Log("not grounded");
         }
     }
 
