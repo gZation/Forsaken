@@ -13,13 +13,13 @@ public class PlayerDashAttackState : State
         Vector2 direction = playerContext.DashArrow.GetComponent<Player_Dash_Direction>().DashDirection;
         playerContext.DashArrow.SetActive(false);
         playerContext.Anim.Play("Dash");
-        playerContext.DashTrail.GetComponent<TrailRenderer>().enabled = true;
+        playerContext.DashTrail.GetComponent<DashTrail>().IsDrawingTrail = true;
+        playerContext.DashTrail.GetComponent<DashTrail>().Direction = new Vector3(Mathf.Sign(direction.x), 0, 0);
         playerContext.RB.AddForce(direction * playerContext.DashForce, ForceMode2D.Impulse);
-        // playerContext.AppliedMovementX = playerContext.RunSpeed * 50f;
+        Physics2D.IgnoreLayerCollision(6, 7, true);
     }
     public override void UpdateState()
     {
-        //playerContext.AppliedMovementX *= 0.75f;
         if (Mathf.Abs(playerContext.RB.linearVelocity.x) <= 0.01f)
         {
             playerContext.DashFinished = true;
@@ -29,7 +29,11 @@ public class PlayerDashAttackState : State
     public override void ExitState()
     {
         Debug.Log("ending dash attack");
-        playerContext.DashTrail.GetComponent<TrailRenderer>().enabled = false;
+        playerContext.DashTrail.GetComponent<DashTrail>().IsDrawingTrail = false;
+        playerContext.DashTrail.GetComponent<DashTrail>().Clear();
+        Physics2D.IgnoreLayerCollision(6, 7, false);
+        playerContext.CurrentDashMeter = 0;
+        
     }
 
     public override void CheckSwitchStates()

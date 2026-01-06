@@ -73,6 +73,7 @@ public class BossStateMachine : StateMachine, IDamageable
             Health -= damage;
             Debug.Log("Enemy Health: " + Health);
             IsHurt = true;
+            player.gameObject.GetComponent<PlayerStateMachine>().CurrentDashMeter += 1;
         }
         if (Health <= 0f)
         {

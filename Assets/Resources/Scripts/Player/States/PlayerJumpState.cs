@@ -36,23 +36,22 @@ public class PlayerJumpState : State
 
     public override void CheckSwitchStates()
     {
-        // if (playerContext.IsHurt)
-        // {
-        //     SwitchState(new PlayerHurtState(playerContext));
-        // } else if (playerContext.Grounded && !playerContext.IsMovementPressed )
-        // {
-        //     Debug.Log("switching to idle");
-        //     SwitchState(new PlayerIdleState(playerContext));
-        // } else if (playerContext.Grounded && !playerContext.IsRunPressed)
-        // {
-        //     SwitchState(new PlayerWalkState(playerContext));
-        // } else if (playerContext.Grounded && playerContext.IsRunPressed)
-        // {
-        //     SwitchState(new PlayerRunState(playerContext));
-        // }
-        if (playerContext.Grounded)
+        if (playerContext.IsHurt)
         {
+            SwitchState(new PlayerHurtState(playerContext));
+        } else if (playerContext.IsDashPressed && playerContext.CanDash)
+        {
+            SwitchState(new PlayerDashState(playerContext));
+        } else if (playerContext.Grounded && !playerContext.IsMovementPressed )
+        {
+            Debug.Log("switching to idle");
             SwitchState(new PlayerIdleState(playerContext));
+        } else if (playerContext.Grounded && !playerContext.IsRunPressed)
+        {
+            SwitchState(new PlayerWalkState(playerContext));
+        } else if (playerContext.Grounded && playerContext.IsRunPressed)
+        {
+            SwitchState(new PlayerRunState(playerContext));
         }
     }
 }

@@ -43,7 +43,7 @@ public class PlayerWalkState : State
         {
             SwitchState(new PlayerJumpState(playerContext));
         } 
-        else if (playerContext.IsDashPressed)
+        else if (playerContext.IsDashPressed && playerContext.CanDash)
         {
             SwitchState(new PlayerDashState(playerContext));
         } 

@@ -6,6 +6,9 @@ public class PlayerStateMachine : StateMachine, IDamageable
     [SerializeField] private  float runSpeed = 7f;
     [SerializeField] private float jumpForce = 20f;
     [SerializeField] private float dashForce = 30f;
+    [SerializeField] private int dashDamage = 5;
+    [SerializeField] private int dashMeter = 10;
+
 
     //player input system
     private PlayerInput playerInput;
@@ -30,6 +33,7 @@ public class PlayerStateMachine : StateMachine, IDamageable
     private int health;
     private float damageCooldown;
     private float canTakeDamage;
+    private int currentDashMeter;
 
     //additional game objects
     private GameObject dashTrail;
@@ -50,6 +54,8 @@ public class PlayerStateMachine : StateMachine, IDamageable
     public bool ShootFinished {get {return shootFinished; } set {shootFinished = value;}}
     public bool DashStarted {get {return dashStarted; } set {dashStarted = value;}}
     public bool DashFinished {get {return dashFinished; } set {dashFinished = value;}}
+    public int CurrentDashMeter {get {return currentDashMeter;} set {currentDashMeter = value;}}
+    public bool CanDash {get {return currentDashMeter >= dashMeter;}}
 
     public bool HurtFinished {get {return hurtFinished; } set {hurtFinished = value;}}
     public bool Grounded {get {return grounded;} set {grounded = value;}}
@@ -68,7 +74,7 @@ public class PlayerStateMachine : StateMachine, IDamageable
 
         //set reference variables
         playerInput = new PlayerInput();
-        dashTrail = transform.Find("dashing trail").gameObject;
+        dashTrail = transform.Find("ghost trail").gameObject;
         dashArrow = transform.Find("dash arrow").gameObject;
         groundCheck = transform.Find("groundedCheck");
         //set player input callbacks
@@ -89,6 +95,7 @@ public class PlayerStateMachine : StateMachine, IDamageable
         Health = 100;
         Cooldown = 1f;
         canTakeDamage = 0f; 
+        currentDashMeter = 0;
     }
 
     protected override void EnterBeginningState()
@@ -99,21 +106,8 @@ public class PlayerStateMachine : StateMachine, IDamageable
 
     protected override void UpdateState()
     {
-        // RaycastHit2D other = Physics2D.CircleCast(groundCheck.position, 0.5f, Vector2.down, groundDetection, 9);
-        // if (other.collider != null)
-        // {
-        //     Debug.Log("collided with " + other.collider.gameObject.name);
-        //     grounded = true;
-        // } else
-        // {
-        //     Debug.Log("not grounded");
-        //     grounded = false;
-        // }
         HandleMovement();
         currentState.UpdateStates();
-        
-        //rb.linearVelocity = appliedMovement;
-        //rb.AddForce(appliedMovement, ForceMode2D.Impulse);
     }
 
     private void HandleMovement()
@@ -168,6 +162,7 @@ public class PlayerStateMachine : StateMachine, IDamageable
     void OnDash(InputAction.CallbackContext context)
     {
         isDashPressed = context.ReadValueAsButton();
+        
     }
 
     void OnEnable()
@@ -182,7 +177,7 @@ public class PlayerStateMachine : StateMachine, IDamageable
 
     public void ApplyDamage(int damage)
     {
-        if (Time.time > canTakeDamage)
+        if (Time.time > canTakeDamage && DashFinished)
         {
             canTakeDamage = Time.time + Cooldown;
             Health -= damage;
@@ -250,6 +245,16 @@ public class PlayerStateMachine : StateMachine, IDamageable
         {
             grounded = false;
             Debug.Log("not grounded");
+        }
+    }
+
+    public void OnTriggerEnter2D(Collider2D other)
+    {
+        string layer = LayerMask.LayerToName(other.gameObject.layer);
+       
+        if (layer.Equals("Enemies") && !DashFinished)
+        {
+            other.gameObject.GetComponent<IDamageable>().ApplyDamage(dashDamage);
         }
     }
 
