@@ -7,6 +7,7 @@ public class DashTrail : MonoBehaviour
     [SerializeField] private GameObject trailMarker;
     [SerializeField] private int numMarkers = 5;
     [SerializeField] private float timeBetweenMarkers = 0.1f;
+    [SerializeField] private int dashDamage = 5;
 
     private float timeSinceLastMarker;
     private int curMarkers = 0;
@@ -61,6 +62,15 @@ public class DashTrail : MonoBehaviour
             markers.RemoveAt(0);
             Destroy(markerToRemove);
             curMarkers--;
+        }
+    }
+
+    public void OnTriggerEnter2D(Collider2D other)
+    {
+        string layer = LayerMask.LayerToName(other.gameObject.layer);
+        if (layer.Equals("Enemies"))
+        {
+            other.gameObject.GetComponent<IDamageable>().ApplyDamage(dashDamage);
         }
     }
 }

@@ -6,7 +6,6 @@ public class PlayerStateMachine : StateMachine, IDamageable
     [SerializeField] private  float runSpeed = 7f;
     [SerializeField] private float jumpForce = 20f;
     [SerializeField] private float dashForce = 30f;
-    [SerializeField] private int dashDamage = 5;
     [SerializeField] private int dashMeter = 10;
 
 
@@ -249,16 +248,6 @@ public class PlayerStateMachine : StateMachine, IDamageable
         if (other.gameObject.CompareTag("Ground"))
         {
             grounded = false;
-        }
-    }
-
-    public void OnTriggerEnter2D(Collider2D other)
-    {
-        string layer = LayerMask.LayerToName(other.gameObject.layer);
-       
-        if (layer.Equals("Enemies") && !DashFinished)
-        {
-            other.gameObject.GetComponent<IDamageable>().ApplyDamage(dashDamage);
         }
     }
 
