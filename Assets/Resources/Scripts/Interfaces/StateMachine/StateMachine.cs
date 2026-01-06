@@ -44,7 +44,7 @@ public abstract class StateMachine : MonoBehaviour
     protected virtual void EnterBeginningState(){}
 
     // Update is called once per frame
-    public void Update()
+    public void FixedUpdate()
     {
         UpdateState();
         FaceMovement();    

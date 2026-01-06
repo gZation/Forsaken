@@ -10,18 +10,19 @@ public class PlayerWalkState : State
     }
     public override void EnterState()
     {
-        playerContext.Anim.SetBool("isWalking", true);
+        playerContext.CanMove = true;
+        playerContext.Anim.Play("Walk");
         playerContext.AppliedMovementX = playerContext.CurrentMovementInput.x * playerContext.MoveSpeed;
+        
     }
     public override void UpdateState()
     {
-        playerContext.AppliedMovementX = playerContext.CurrentMovementInput.x * playerContext.MoveSpeed;
+        playerContext.AppliedMovementX = playerContext.CurrentMovementInput.x * playerContext.MoveSpeed * 0.999f;
         
         CheckSwitchStates();
     }
     public override void ExitState()
     {
-        playerContext.Anim.SetBool("isWalking", false);
     }
 
     public override void CheckSwitchStates()
@@ -37,9 +38,14 @@ public class PlayerWalkState : State
         else if (playerContext.IsShootPressed)
         {
             SwitchState(new PlayerShootState(playerContext));
-        } else if (playerContext.Grounded && playerContext.IsJumpPressed)
+        } 
+        else if (playerContext.Grounded && playerContext.IsJumpPressed)
         {
             SwitchState(new PlayerJumpState(playerContext));
+        } 
+        else if (playerContext.IsDashPressed && playerContext.CanDash)
+        {
+            SwitchState(new PlayerDashState(playerContext));
         } 
         else if (!playerContext.IsMovementPressed )
         {

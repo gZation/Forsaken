@@ -10,7 +10,8 @@ public class PlayerIdleState : State
     }
     public override void EnterState()
     {
-        playerContext.Anim.SetBool("isIdle", true);
+        playerContext.CanMove = true;
+        playerContext.Anim.Play("Idle");
         playerContext.AppliedMovementX = 0f;
         playerContext.AppliedMovementY = 0f;
     }
@@ -20,7 +21,6 @@ public class PlayerIdleState : State
     }
     public override void ExitState()
     {
-        playerContext.Anim.SetBool("isIdle", false);
     }
 
     public override void CheckSwitchStates()
@@ -39,6 +39,9 @@ public class PlayerIdleState : State
         } else if (playerContext.Grounded && playerContext.IsJumpPressed)
         {
             SwitchState(new PlayerJumpState(playerContext));
+        } else if (playerContext.IsDashPressed && playerContext.CanDash)
+        {
+            SwitchState(new PlayerDashState(playerContext));
         } else if (playerContext.IsMovementPressed && playerContext.IsRunPressed)
         {
             SwitchState(new PlayerRunState(playerContext));

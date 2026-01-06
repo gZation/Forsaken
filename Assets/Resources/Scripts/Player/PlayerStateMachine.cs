@@ -4,44 +4,69 @@ public class PlayerStateMachine : StateMachine, IDamageable
 {
     //control variables
     [SerializeField] private  float runSpeed = 7f;
+    [SerializeField] private float jumpForce = 20f;
+    [SerializeField] private float dashForce = 30f;
+    [SerializeField] private int dashDamage = 5;
+    [SerializeField] private int dashMeter = 10;
+
 
     //player input system
     private PlayerInput playerInput;
     private Vector2 currentMovementInput;
     private bool isMovementPressed;
+    private bool canMove = true;
     private bool isRunPressed;
     private bool isJumpPressed;
     private bool isHitPressed;
     private bool isShootPressed;
+    private bool isDashPressed;
     private bool isHurt; 
     private bool attackFinished = false;
     private bool shootStarted = false;
     private bool shootFinished = false;
+    private bool dashStarted = false;
+    private bool dashFinished = false;
     private bool hurtFinished = false;
-    private bool grounded = true;
+    [SerializeField] private bool grounded = true;
 
     //player info
     private int health;
     private float damageCooldown;
     private float canTakeDamage;
+    private int currentDashMeter;
+
+    //additional game objects
+    private GameObject dashTrail;
+    private GameObject dashArrow;
+    private Transform groundCheck;
 
     //getters and settesr
+    public bool CanMove {get {return canMove;} set {canMove = value;}}
     public bool IsMovementPressed {get {return isMovementPressed;} set {isMovementPressed = value;}}
     public bool IsRunPressed {get {return isRunPressed;} set {isRunPressed = value;}}
     public bool IsJumpPressed {get {return isJumpPressed;} set {isJumpPressed = value;}}
     public bool IsHitPressed {get {return isHitPressed;} set {isHitPressed = value;}}
     public bool IsShootPressed {get {return isShootPressed;} set {isShootPressed = value;}}
+    public bool IsDashPressed {get {return isDashPressed;} set {isDashPressed = value;}}
     public bool IsHurt{get {return isHurt;} set {isHurt = value;}}
     public bool AttackFinished {get {return attackFinished; } set {attackFinished = value;}}
     public bool ShootStarted {get {return shootStarted; } set {shootStarted = value;}}
     public bool ShootFinished {get {return shootFinished; } set {shootFinished = value;}}
+    public bool DashStarted {get {return dashStarted; } set {dashStarted = value;}}
+    public bool DashFinished {get {return dashFinished; } set {dashFinished = value;}}
+    public int CurrentDashMeter {get {return currentDashMeter;} set {currentDashMeter = value;}}
+    public bool CanDash {get {return currentDashMeter >= dashMeter;}}
 
     public bool HurtFinished {get {return hurtFinished; } set {hurtFinished = value;}}
     public bool Grounded {get {return grounded;} set {grounded = value;}}
     public Vector2 CurrentMovementInput {get {return currentMovementInput;}}
     public float RunSpeed {get {return runSpeed;}}
+    public float JumpForce {get {return jumpForce;}}
+    public float DashForce {get {return dashForce;}}
     public int Health {get {return health;} set {health = value;}}
     public float Cooldown {get {return damageCooldown;} set {damageCooldown = value;}}
+    public GameObject DashTrail {get {return dashTrail;}}
+    public GameObject DashArrow {get {return dashArrow;}}
 
     protected override void Init()
     {
@@ -49,7 +74,9 @@ public class PlayerStateMachine : StateMachine, IDamageable
 
         //set reference variables
         playerInput = new PlayerInput();
-
+        dashTrail = transform.Find("ghost trail").gameObject;
+        dashArrow = transform.Find("dash arrow").gameObject;
+        groundCheck = transform.Find("groundedCheck");
         //set player input callbacks
         playerInput.CharacterControls.Move.started += OnMovementPerformed;
         playerInput.CharacterControls.Move.canceled += OnMovementCancelled;
@@ -62,10 +89,13 @@ public class PlayerStateMachine : StateMachine, IDamageable
         playerInput.CharacterControls.Hit.canceled += OnHit;
         playerInput.CharacterControls.Shoot.started += OnShoot;
         playerInput.CharacterControls.Shoot.canceled += OnShoot;
+        playerInput.CharacterControls.Dash.started += OnDash;
+        playerInput.CharacterControls.Dash.canceled += OnDash;
 
         Health = 100;
         Cooldown = 1f;
         canTakeDamage = 0f; 
+        currentDashMeter = 0;
     }
 
     protected override void EnterBeginningState()
@@ -76,8 +106,19 @@ public class PlayerStateMachine : StateMachine, IDamageable
 
     protected override void UpdateState()
     {
-        currentState.UpdateState();
-        rb.linearVelocity = appliedMovement;
+        HandleMovement();
+        currentState.UpdateStates();
+    }
+
+    private void HandleMovement()
+    {
+        if (canMove)
+        {
+            rb.linearVelocity = appliedMovement;
+        } else
+        {
+            rb.AddForce(appliedMovement, ForceMode2D.Impulse);
+        }
     }
 
     protected override void FaceMovement()
@@ -118,9 +159,10 @@ public class PlayerStateMachine : StateMachine, IDamageable
     {
         isShootPressed = context.ReadValueAsButton();
     }
-    void OnHurt(InputAction.CallbackContext context)
+    void OnDash(InputAction.CallbackContext context)
     {
-        isHurt = context.ReadValueAsButton();
+        isDashPressed = context.ReadValueAsButton();
+        
     }
 
     void OnEnable()
@@ -135,7 +177,7 @@ public class PlayerStateMachine : StateMachine, IDamageable
 
     public void ApplyDamage(int damage)
     {
-        if (Time.time > canTakeDamage)
+        if (Time.time > canTakeDamage && DashFinished)
         {
             canTakeDamage = Time.time + Cooldown;
             Health -= damage;
@@ -149,6 +191,11 @@ public class PlayerStateMachine : StateMachine, IDamageable
             Time.timeScale = 0f;
         }
        
+    }
+
+    public void SetTimeScale(float scale)
+    {
+        Time.timeScale = scale;
     }
 
     void OnAttackAnimationStart()
@@ -183,13 +230,30 @@ public class PlayerStateMachine : StateMachine, IDamageable
         HurtFinished = true;
     }
 
-    void OnJumpAnimationStart()
+    public void OnCollisionEnter2D(Collision2D other)
     {
-        grounded = false;
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            grounded = true;
+        }
     }
-    void OnJumpAnimationEnd()
+
+    public void OnCollisionExit2D(Collision2D other)
     {
-        grounded = true;
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            grounded = false;
+        }
+    }
+
+    public void OnTriggerEnter2D(Collider2D other)
+    {
+        string layer = LayerMask.LayerToName(other.gameObject.layer);
+       
+        if (layer.Equals("Enemies") && !DashFinished)
+        {
+            other.gameObject.GetComponent<IDamageable>().ApplyDamage(dashDamage);
+        }
     }
 
 }

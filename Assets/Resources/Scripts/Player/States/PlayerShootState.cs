@@ -10,7 +10,7 @@ public class PlayerShootState : State
     }
     public override void EnterState()
     {
-        playerContext.Anim.SetTrigger("Shoot");
+        playerContext.Anim.Play("Shoot");
         playerContext.AppliedMovementX = 0f;
         playerContext.AppliedMovementY = 0f;
         playerContext.IsShootPressed = false;  // Reset to prevent continuous shooting

@@ -10,19 +10,19 @@ public class PlayerRunState : State
     }
     public override void EnterState()
     {
-        playerContext.Anim.SetBool("isRunning", true);
+        playerContext.CanMove = true;
+        playerContext.Anim.Play("Run");
         playerContext.AppliedMovementX = playerContext.CurrentMovementInput.x * playerContext.RunSpeed;
         
     }
     public override void UpdateState()
     {
-        playerContext.AppliedMovementX = playerContext.CurrentMovementInput.x * playerContext.RunSpeed;
+        playerContext.AppliedMovementX = playerContext.CurrentMovementInput.x * playerContext.RunSpeed * 0.999f;
         
         CheckSwitchStates();
     }
     public override void ExitState()
     {
-        playerContext.Anim.SetBool("isRunning", false);
     }
 
     public override void CheckSwitchStates()
@@ -41,7 +41,10 @@ public class PlayerRunState : State
         } else if (playerContext.Grounded && playerContext.IsJumpPressed)
         {
             SwitchState(new PlayerJumpState(playerContext));
-        }  else if (!playerContext.IsMovementPressed)
+        }  else if (playerContext.IsDashPressed && playerContext.CanDash)
+        {
+            SwitchState(new PlayerDashState(playerContext));
+        } else if (!playerContext.IsMovementPressed)
         {
             SwitchState(new PlayerIdleState(playerContext));
         } else if (playerContext.IsMovementPressed && !playerContext.IsRunPressed)
