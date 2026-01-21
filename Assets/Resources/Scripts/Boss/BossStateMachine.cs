@@ -6,7 +6,8 @@ public class BossStateMachine : StateMachine, IDamageable
 
     [Header("Attack Controls")]
     [SerializeField] private  float targetDistance;
-    [SerializeField] private  float timeInIdle;
+    [SerializeField] private  float stunTime;
+    [SerializeField] private  float stunInterval;
     [SerializeField] private  int damage;
     [SerializeField] private float damageCooldown;
 
@@ -14,10 +15,9 @@ public class BossStateMachine : StateMachine, IDamageable
     [SerializeField] private float grappleTargetDistance;
     [SerializeField] private float grappleDuration;
     [SerializeField] private float grappleSpeed;
-
-    private GameObject swordPoint;
     
     private bool isFlipped = false;
+    private bool isStunned = false;
     private int grapplingFinished = 0;
     private int attackFinished = 0;
     private int hurtFinished = 0;
@@ -25,6 +25,7 @@ public class BossStateMachine : StateMachine, IDamageable
     private int health;
     
     public bool FightStarted {get {return manager.FightStarted;}}
+    public bool IsStunned {get {return isStunned;} set {isStunned = value;}}
     public bool IsTransitioning {get {return manager.IsTransitioning;} set {manager.IsTransitioning = value;}}
     public int GrapplingFinished {get {return grapplingFinished;} set {grapplingFinished = value;}}
     public int AttackFinished {get {return attackFinished; } set {attackFinished = value;}}
@@ -33,7 +34,8 @@ public class BossStateMachine : StateMachine, IDamageable
     public int Health {get {return health;} set {health = value;}}
     public int Damage {get {return damage;} set {damage = value;}}
     public float Cooldown {get {return damageCooldown;} set {damageCooldown = value;}}
-    public float TimeInIdle {get {return timeInIdle;}}
+    public float StunTime {get {return stunTime;}}
+    public float StunInterval {get {return stunInterval;}}
     public float TargetDistance {get {return targetDistance;}}
     public float GrappleDuration {get {return grappleDuration;}}
     public float GrappleSpeed {get {return grappleSpeed;}}
@@ -45,7 +47,6 @@ public class BossStateMachine : StateMachine, IDamageable
         base.Init();
         sprite = transform.Find("Sprite");
         Health = 100;
-        swordPoint = sprite.Find("Broadsword").Find("sword trail tracker").gameObject;
     }
 
     protected override void EnterBeginningState()
@@ -100,6 +101,10 @@ public class BossStateMachine : StateMachine, IDamageable
             }
             
         }
+        if (Health % StunInterval == 0 && !isStunned)
+        {
+            isStunned = true;
+        }
         if (Health <= 0f)
         {
             manager.CheckWinStatus();
@@ -121,15 +126,12 @@ public class BossStateMachine : StateMachine, IDamageable
     public void OnAttackStart()
     {
         attackFinished = 0;
-        swordPoint.SetActive(true);
 
     }
 
     public void OnAttackEnd()
     {
         attackFinished = 1;
-        swordPoint.SetActive(false);
-
     }
     
 

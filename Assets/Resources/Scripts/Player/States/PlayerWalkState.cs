@@ -13,7 +13,6 @@ public class PlayerWalkState : State
         playerContext.CanMove = true;
         playerContext.Anim.Play("Walk");
         playerContext.AppliedMovementX = playerContext.CurrentMovementInput.x * playerContext.MoveSpeed;
-        playerContext.NumHits = 0;
         
     }
     public override void UpdateState()

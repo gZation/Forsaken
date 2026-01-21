@@ -11,15 +11,12 @@ public class PlayerStateMachine : StateMachine, IDamageable
     [SerializeField] private float slashForce = 30f;
     [SerializeField] private float dashForce = 30f;
     [SerializeField] private int dashMeter = 10;
-    [SerializeField] private float slashComboCooldown = 1f;
-
 
     [Header("Object References")]
     [SerializeField] private GameManager manager;
     [SerializeField] private TextMeshProUGUI healthBar;
     [SerializeField] private TextMeshProUGUI dashBar;
     [SerializeField] private GameObject shootIcon;
-    private GameObject sword;
 
     //player input system
     private PlayerInput playerInput;
@@ -42,15 +39,12 @@ public class PlayerStateMachine : StateMachine, IDamageable
     private bool isDashing = false;
     private bool hurtFinished = false;
     private bool grounded = true;
-    private int numHits = 0;
 
     //player info
     private int health;
     private float damageCooldown;
     private float canTakeDamage;
-    private float timeOfLastComboAttack;
     private int currentDashMeter;
-    private bool comboDone;
 
     //additional game objects
     private GameObject dashTrail;
@@ -63,7 +57,7 @@ public class PlayerStateMachine : StateMachine, IDamageable
     public bool IsMovementPressed {get {return isMovementPressed;} set {isMovementPressed = value;}}
     public bool IsRunPressed {get {return isRunPressed;} set {isRunPressed = value;}}
     public bool IsJumpPressed {get {return isJumpPressed;} set {isJumpPressed = value;}}
-    public bool IsHitPressed {get {return isHitPressed && numHits > 0;} set {isHitPressed = value;}}
+    public bool IsHitPressed {get {return isHitPressed;} set {isHitPressed = value;}}
     public bool IsShootPressed {get {return isShootPressed;} set {isShootPressed = value;}}
     public bool IsAimingForward {get {
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -80,7 +74,6 @@ public class PlayerStateMachine : StateMachine, IDamageable
     public bool DashFinished {get {return dashFinished; } set {dashFinished = value;}}
     public bool IsDashing {get {return isDashing; } set {isDashing = value;}}
     public int CurrentDashMeter {get {return currentDashMeter;} set {currentDashMeter = value;}}
-    public int NumHits {get {return numHits;} set {numHits = value;}}
     public bool DashUnlocked {get {return dashUnlocked;}}
     public bool CanDash {get {return dashUnlocked && currentDashMeter >= dashMeter;}}
     public bool HurtFinished {get {return hurtFinished; } set {hurtFinished = value;}}
@@ -94,8 +87,6 @@ public class PlayerStateMachine : StateMachine, IDamageable
     public float Cooldown {get {return damageCooldown;} set {damageCooldown = value;}}
     public GameObject DashTrail {get {return dashTrail;}}
     public GameObject DashArrow {get {return dashArrow;}}
-    public GameObject Sword {get {return sword;}}
-    public bool ComboDone {get {return comboDone || Time.time > timeOfLastComboAttack + slashComboCooldown;} set {comboDone = value;}}
 
     protected override void Init()
     {
@@ -105,7 +96,6 @@ public class PlayerStateMachine : StateMachine, IDamageable
         playerInput = new PlayerInput();
         dashTrail = transform.Find("ghost trail").gameObject;
         dashArrow = transform.Find("dash arrow").gameObject;
-        sword = sprite.transform.Find("sword").Find("sword trail tracker").gameObject;
         groundCheck = transform.Find("groundedCheck");
 
         //set player input callbacks
@@ -127,7 +117,6 @@ public class PlayerStateMachine : StateMachine, IDamageable
         Cooldown = 1f;
         canTakeDamage = 0f; 
         currentDashMeter = 0;
-        timeOfLastComboAttack = 0f;
     }
 
     protected override void EnterBeginningState()
@@ -191,16 +180,6 @@ public class PlayerStateMachine : StateMachine, IDamageable
     void OnHit(InputAction.CallbackContext context)
     {
         isHitPressed = context.ReadValueAsButton();
-        UpdateDashText();
-        if (isHitPressed && (numHits == 0 || numHits >= 3))
-        {
-            timeOfLastComboAttack = Time.time;
-            numHits = 1;
-        } else if (isHitPressed && Time.time < timeOfLastComboAttack + slashComboCooldown && numHits <= 3)
-        {
-            timeOfLastComboAttack = Time.time;
-            numHits += 1;
-        } 
     }
     void OnShoot(InputAction.CallbackContext context)
     {
@@ -245,11 +224,7 @@ public class PlayerStateMachine : StateMachine, IDamageable
         AttackFinished = false;
 
     }
-    void OnAttackAnimationClimax()
-    {
-        sword.SetActive(true);
 
-    }
     void OnAttackAnimationFinish()
     {
         AttackFinished = true;

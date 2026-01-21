@@ -20,7 +20,7 @@ public class BossGrappleState : State
         if (lineRenderer == null)
         {
             Debug.LogError("LineRenderer component not found on boss GameObject");
-            SwitchState(new BossIdleState(bossContext));
+            SwitchState(new BossStunState(bossContext));
             return;
         }
         lineRenderer.enabled = true;

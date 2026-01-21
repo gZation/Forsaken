@@ -1,14 +1,15 @@
 using UnityEngine;
-public class BossIdleState : State
+public class BossStunState : State
 {
     private BossStateMachine bossContext;
     private float curTime;
-    public BossIdleState(BossStateMachine currentContext) : base(currentContext)
+    public BossStunState(BossStateMachine currentContext) : base(currentContext)
     {
         bossContext = currentContext;
     }
     public override void EnterState()
     {
+        Debug.Log("currently stunned");
         bossContext.Anim.Play("Idle");
         bossContext.AppliedMovementX = 0f;
         bossContext.AppliedMovementY = 0f;
@@ -21,11 +22,12 @@ public class BossIdleState : State
     }
     public override void ExitState()
     {
+        bossContext.IsStunned = false;
     }
 
     public override void CheckSwitchStates()
     {
-        if (curTime > bossContext.TimeInIdle)
+        if (curTime > bossContext.StunTime)
         {
             if (bossContext.CurrentStage >= 2 && bossContext.GrappleInRange())
             {

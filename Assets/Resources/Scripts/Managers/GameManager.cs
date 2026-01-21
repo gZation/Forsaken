@@ -7,7 +7,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject boss;
     [SerializeField] private CutsceneManager cutsceneManager;
-    [SerializeField] private GameObject battleBounds;
     [SerializeField] private GameObject aggroArea;
 
     [Header("UI References")]
@@ -41,7 +40,6 @@ public class GameManager : MonoBehaviour
     {
         IsTransitioning = true;
         fightStarted = true;
-        battleBounds.SetActive(true);
         aggroArea.SetActive(false);
     }
 

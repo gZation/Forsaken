@@ -15,10 +15,13 @@ public class StageOne : State
         if (bossContext.InRange())
         {
             SetSubState(new BossAttackState(bossContext));
-        } else
+        } else if (bossContext.IsStunned)
         {   
+            SetSubState(new BossStunState(bossContext));
+        } else
+        {
             SetSubState(new BossWalkState(bossContext));
-        } 
+        }
     }
     public override void EnterState()
     {

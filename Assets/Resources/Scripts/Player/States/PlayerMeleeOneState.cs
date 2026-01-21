@@ -25,9 +25,5 @@ public class PlayerMeleeOneState : State
 
     public override void CheckSwitchStates()
     {
-        if (playerContext.AttackFinished && playerContext.NumHits > 1)
-        {
-            SwitchState(new PlayerMeleeTwoState(playerContext));
-        }
     }
 }

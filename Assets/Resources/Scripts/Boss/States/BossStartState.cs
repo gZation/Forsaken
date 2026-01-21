@@ -28,7 +28,14 @@ public class BossStartState : State
     {
         if (bossContext.FightStarted)
         {
-            SwitchState(new StageOne(bossContext));
+            if (bossContext.CurrentStage == 1) {
+                SwitchState(new StageOne(bossContext));
+            } else if (bossContext.CurrentStage == 2) {
+                SwitchState(new StageTwo(bossContext));
+            } else if (bossContext.CurrentStage == 3) {
+                SwitchState(new StageThree(bossContext));
+            }
+        
         } 
     }
 }

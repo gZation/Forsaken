@@ -19,6 +19,9 @@ public class StageThree : State
         else if (bossContext.InRange())
         {
             SetSubState(new BossAttackState(bossContext));
+        } else if (bossContext.IsStunned)
+        {   
+            SetSubState(new BossStunState(bossContext));
         } else
         {   
             SetSubState(new BossWalkState(bossContext));

@@ -25,9 +25,12 @@ public class BossAttackState : State
 
     public override void CheckSwitchStates()
     {
-        if (bossContext.AttackFinished == 1)
+        if (bossContext.IsStunned)
+        {   Debug.Log("switching states");
+            SwitchState(new BossStunState(bossContext));
+        } else if (bossContext.AttackFinished == 1)
         {
-            SwitchState(new BossIdleState(bossContext));
+            SwitchState(new BossWalkState(bossContext));
         }
         
     }

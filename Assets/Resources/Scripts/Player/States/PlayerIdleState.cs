@@ -14,7 +14,6 @@ public class PlayerIdleState : State
         playerContext.Anim.Play("Idle");
         playerContext.AppliedMovementX = 0f;
         playerContext.AppliedMovementY = 0f;
-        playerContext.NumHits = 0;
     }
     public override void UpdateState()
     {

@@ -26,7 +26,10 @@ public class BossWalkState : State
 
     public override void CheckSwitchStates()
     {
-        if (bossContext.InRange())
+        if (bossContext.IsStunned)
+        {   
+            SwitchState(new BossStunState(bossContext));
+        } else if (bossContext.InRange())
         {
             SwitchState(new BossAttackState(bossContext));
         }

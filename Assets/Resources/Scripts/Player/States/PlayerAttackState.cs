@@ -15,7 +15,6 @@ public class PlayerAttackState : State
         playerContext.AppliedMovementX = 0f;
         
         playerContext.AttackFinished = false; 
-        playerContext.ComboDone = false;
     }
     public override void UpdateState()
     {
@@ -23,25 +22,12 @@ public class PlayerAttackState : State
     }
     public override void ExitState()
     {
-        playerContext.Sword.SetActive(false);
         playerContext.CanMove = true;
     }
 
     public override void InitializeSubStates()
     {
-        if (playerContext.NumHits == 1)
-        {
-            SetSubState(new PlayerMeleeOneState(playerContext));
-        } else if (playerContext.NumHits == 2)
-        {
-            SetSubState(new PlayerMeleeTwoState(playerContext));
-        } else if (playerContext.NumHits == 3)
-        {
-            SetSubState(new PlayerMeleeThreeState(playerContext));
-        } else
-        {
-            playerContext.AttackFinished = true;
-        }
+        SetSubState(new PlayerMeleeOneState(playerContext));
     }
 
     public override void CheckSwitchStates()
@@ -50,33 +36,14 @@ public class PlayerAttackState : State
         {
             SwitchState(new PlayerHurtState(playerContext));
         }
-        // else if (!playerContext.AttackFinished)
-        // {
-        //     return;
-        // }
         if (playerContext.AttackFinished && playerContext.IsMovementPressed && playerContext.IsRunPressed)
         {
-            playerContext.ComboDone = true;
             SwitchState(new PlayerRunState(playerContext));
-        } else if (playerContext.AttackFinished && playerContext.IsMovementPressed)
-        {   playerContext.ComboDone = true;
+        } else if (playerContext.AttackFinished && playerContext.IsMovementPressed){
             SwitchState(new PlayerWalkState(playerContext));
-        }
-        if (playerContext.ComboDone)
+        } else if (playerContext.AttackFinished)
         {
-            if (playerContext.IsMovementPressed && playerContext.IsRunPressed)
-            {
-                SwitchState(new PlayerRunState(playerContext));
-            } else if (playerContext.IsMovementPressed) {
-                SwitchState(new PlayerWalkState(playerContext));
-            }
-            else
-            {
-                SwitchState(new PlayerIdleState(playerContext));
-            }
-            
+            SwitchState(new PlayerIdleState(playerContext));
         }
-
-        
     }
 }

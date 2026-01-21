@@ -30,6 +30,7 @@ public class CutsceneManager : MonoBehaviour
     {
         playerStateMachine.OnDisable();
         manager.FightStarted = false;
+        bossStateMachine.IsStunned = false;
         bossStateMachine.JumpToState(new BossStartState(bossStateMachine));
     }
 
