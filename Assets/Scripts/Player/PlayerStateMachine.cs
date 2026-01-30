@@ -273,6 +273,7 @@ public class PlayerStateMachine : StateMachine, IDamageable
     //ability 3 is dashing
     public void UnlockAbility(int abilityNum)
     {
+        Debug.Log("unlocking");
         if (abilityNum == 2)
         {
             shootUnlocked = true;
