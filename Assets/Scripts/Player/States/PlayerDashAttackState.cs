@@ -11,7 +11,7 @@ public class PlayerDashAttackState : State
     }
     public override void EnterState()
     {
-        direction = new Vector3(playerContext.Sprite.localScale.x, 0f, 0f);
+        direction = new Vector3(playerContext.IsMovementPressed ? playerContext.CurrentMovementInput.x : playerContext.Sprite.localScale.x, 0f, 0f);
         endGoal = playerContext.Player.transform.position + direction * playerContext.DashDistance;
         Physics2D.IgnoreLayerCollision(6, 7, true);
         Physics2D.IgnoreLayerCollision(6, 8, true);
@@ -45,11 +45,14 @@ public class PlayerDashAttackState : State
     {
         if (playerContext.IsRunPressed)
         {
+            Debug.Log("dash parent state: " + base.currentSuperState);
             SwitchState(new PlayerRunState(playerContext));
-        } else
+        } else if (playerContext.IsMovementPressed)
+        {
+            SwitchState(new PlayerWalkState(playerContext));
+        } else 
         {
             SwitchState(new PlayerIdleState(playerContext));
         }
-        
     }
 }
